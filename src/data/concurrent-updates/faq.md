@@ -49,7 +49,7 @@ This is how the action looks like after adding the control logic:
 **1-** We’ll start by getting the record currently in the database, locking it for update to prevent others to access it while the update is not concluded. GetForUpdate entity action is especially important when you have high volume of users editing the same record, what increases the chance of simultaneous update transactions.
 
 **2-** Then, validating if that record was updated, comparing the UpdatedOn attribute with the record we are currently saving. Use the condition:
-`GetSavedContact.List.Current.Contact.UpdatedOn > Contact.UpdatedOn`
+`GetSavedContact.List.Current.Contact.UpdatedOn < Contact.UpdatedOn`
 
 **3-** If we detect a concurrent update, we raise a User exception, doing a rollback on this transaction. Otherwise, the flow proceeds to the normal record update, also updating the audit fields (Updatedby, UpdatedOn).
 Note that in this example, we are also getting the information of the user that has updated the record, for context.
